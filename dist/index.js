@@ -4,20 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const pets_1 = require("./data/pets");
-const app = (0, express_1.default)();
+const cors_1 = __importDefault(require("cors"));
+const pets_routes_1 = require("./routes/pets.routes");
 const PORT = 8000;
-app.listen(PORT, () => {
-    console.log("Listening on port:", PORT);
-});
-app.get("/", (req, res) => {
-    res.json(pets_1.pets);
-});
-app.get("/:id", (req, res) => {
-    const { id } = req.params;
-    const pet = pets_1.pets.find((pet) => pet.id.toString() === id);
-    res.json(pet);
-});
+const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use("/pets", pets_routes_1.petRouter);
 app.use((req, res) => {
-    res.status(404).json({ message: "No Route found" });
+    res.status(404).json({ message: "No endpoint found" });
+});
+app.listen(PORT, () => {
+    console.log("Listening on port: ", PORT);
 });
